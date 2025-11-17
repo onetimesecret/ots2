@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.tauri.app/config/2.0",
+  "identifier": "main-capability",
+  "description": "Capability for the main window with minimal permissions",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-close",
+    "core:window:allow-minimize",
+    "core:window:allow-maximize",
+    "core:window:allow-unmaximize",
+    "core:window:allow-set-title",
+    "shell:allow-open",
+    {
+      "identifier": "secure-storage:allow-get",
+      "allow": [
+        {
+          "key": "api_credentials"
+        }
+      ]
+    },
+    {
+      "identifier": "secure-storage:allow-set",
+      "allow": [
+        {
+          "key": "api_credentials"
+        }
+      ]
+    },
+    "secure-storage:allow-delete"
+  ]
+}
