@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.tauri.app/config/2.0",
+  "productName": "OneTimeSecret",
+  "version": "0.1.0",
+  "identifier": "com.onetimesecret.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "script-src": "'self' 'wasm-unsafe-eval'",
+        "style-src": "'self' 'unsafe-inline'",
+        "img-src": "'self' data: https:",
+        "connect-src": "'self' https://onetimesecret.com https://*.onetimesecret.com",
+        "font-src": "'self'",
+        "object-src": "'none'",
+        "base-uri": "'self'",
+        "frame-ancestors": "'none'",
+        "form-action": "'self'"
+      },
+      "dangerousDisableAssetCspModification": false,
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$APPDATA/**", "$RESOURCE/**"]
+      },
+      "capabilities": [
+        "main-capability"
+      ]
+    },
+    "windows": [
+      {
+        "title": "OneTimeSecret",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "center": true,
+        "transparent": false,
+        "focus": true,
+        "visible": true,
+        "maximized": false
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [],
+    "externalBin": [],
+    "copyright": "",
+    "shortDescription": "Secure desktop client for OneTimeSecret",
+    "longDescription": "A security-first desktop application for creating and sharing secrets using OneTimeSecret"
+  },
+  "plugins": {
+    "shell": {
+      "open": true
+    }
+  }
+}

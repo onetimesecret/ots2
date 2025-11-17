@@ -1,0 +1,33 @@
+[package]
+name = "onetimesecret-desktop"
+version = "0.1.0"
+description = "Security-first desktop application for OneTimeSecret"
+authors = ["OneTimeSecret Contributors"]
+license = ""
+repository = ""
+edition = "2021"
+
+[lib]
+name = "onetimesecret_lib"
+crate-type = ["staticlib", "cdylib", "lib"]
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[dependencies]
+tauri = { version = "2.1", features = [] }
+tauri-plugin-shell = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+tokio = { version = "1", features = ["full"] }
+thiserror = "2.0"
+base64 = "0.22"
+url = "2.5"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-secure-storage = "2.0.23"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
