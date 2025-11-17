@@ -51,6 +51,41 @@
       </div>
 
       <div class="form-section">
+        <h3>API Authentication</h3>
+
+        <div class="info-box">
+          <p>
+            <strong>Optional:</strong> If you're using a custom OneTimeSecret instance
+            with authentication enabled, enter your credentials here.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="apiUsername">API Username</label>
+          <input
+            id="apiUsername"
+            v-model="formData.api_username"
+            type="text"
+            placeholder="Your API username"
+            autocomplete="username"
+          />
+          <small>Leave blank if authentication is not required</small>
+        </div>
+
+        <div class="form-group">
+          <label for="apiKey">API Key</label>
+          <input
+            id="apiKey"
+            v-model="formData.api_key"
+            type="password"
+            placeholder="Your API key"
+            autocomplete="current-password"
+          />
+          <small>Stored securely using platform-native encryption</small>
+        </div>
+      </div>
+
+      <div class="form-section">
         <h3>Security</h3>
 
         <div class="info-box">
@@ -117,6 +152,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { invoke } from '@tauri-apps/api/core'
 import { useSecretsStore } from '@/stores/secrets'
 import type { AppSettings } from '@/types/api'
 
@@ -126,14 +162,23 @@ const saveSuccess = ref(false)
 const error = ref<string | null>(null)
 
 const formData = ref<AppSettings>({
-  apiEndpoint: 'https://onetimesecret.dev',
-  defaultTTL: 604800,
+  api_endpoint: 'https://onetimesecret.dev',
+  default_ttl: 604800,
   theme: 'system',
 })
 
-onMounted(() => {
-  // Load current settings
-  formData.value = { ...store.settings }
+onMounted(async () => {
+  // Load settings from secure storage
+  try {
+    const settingsJson = await invoke<string>('load_settings')
+    const loadedSettings = JSON.parse(settingsJson) as AppSettings
+    formData.value = loadedSettings
+    store.updateSettings(loadedSettings)
+  } catch (err) {
+    console.error('Failed to load settings:', err)
+    // Use default settings on error
+    formData.value = { ...store.settings }
+  }
 })
 
 async function handleSave() {
@@ -145,8 +190,9 @@ async function handleSave() {
     // Update store
     store.updateSettings(formData.value)
 
-    // In a real app, you might save to secure storage here
-    // await invoke('save_settings', { settings: formData.value })
+    // Save to secure storage via Tauri command
+    const settingsJson = JSON.stringify(formData.value)
+    await invoke('save_settings', { settingsJson })
 
     saveSuccess.value = true
 
@@ -163,9 +209,11 @@ async function handleSave() {
 
 function handleReset() {
   formData.value = {
-    apiEndpoint: 'https://onetimesecret.dev',
-    defaultTTL: 604800,
+    api_endpoint: 'https://onetimesecret.dev',
+    default_ttl: 604800,
     theme: 'system',
+    api_username: undefined,
+    api_key: undefined,
   }
 }
 </script>

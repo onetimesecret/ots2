@@ -47,9 +47,11 @@ export interface ApiError {
 }
 
 export interface AppSettings {
-  apiEndpoint: string
-  defaultTTL: number
+  api_endpoint: string
+  default_ttl: number
   theme: 'light' | 'dark' | 'system'
+  api_username?: string
+  api_key?: string
 }
 
 export type Result<T, E = ApiError> =

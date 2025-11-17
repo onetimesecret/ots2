@@ -6,8 +6,8 @@ export const useSecretsStore = defineStore('secrets', () => {
   // State
   const recentSecrets = ref<SecretMetadata[]>([])
   const settings = ref<AppSettings>({
-    apiEndpoint: 'https://onetimesecret.dev',
-    defaultTTL: 604800, // 7 days in seconds
+    api_endpoint: 'https://onetimesecret.dev',
+    default_ttl: 604800, // 7 days in seconds
     theme: 'system',
   })
   const loading = ref(false)

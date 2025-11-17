@@ -27,7 +27,7 @@ export function useSecrets() {
       const result = await invoke<SecretResponse>('create_secret', {
         secret: request.secret,
         passphrase: request.passphrase,
-        ttl: request.ttl || store.settings.defaultTTL,
+        ttl: request.ttl || store.settings.default_ttl,
         recipient: request.recipient,
       })
 

@@ -174,10 +174,15 @@ See `src-tauri/capabilities/main-capability.json` for the full permission set.
 Application settings can be configured in the Settings tab:
 
 - **API Endpoint**: OneTimeSecret API URL (default: `https://onetimesecret.dev`)
+  - Supports custom/self-hosted OneTimeSecret instances
 - **Default TTL**: Default time-to-live for secrets (default: 7 days)
-- **Theme**: Light, dark, or system theme
+- **Theme**: Light, dark, or system theme (UI implementation pending)
+- **API Authentication** (Optional):
+  - **Username**: API username for authenticated requests
+  - **API Key**: API key/password for authenticated requests
+  - Required only for custom instances with authentication enabled
 
-Settings are stored securely using platform-native storage.
+All settings are stored securely using platform-native storage and automatically loaded on app startup.
 
 ## API Integration
 
