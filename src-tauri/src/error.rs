@@ -30,6 +30,15 @@ pub enum AppError {
 
     #[error("Operation not permitted: {0}")]
     PermissionError(String),
+
+    #[error("Rate limit exceeded. Please wait before trying again.")]
+    RateLimitExceeded,
+
+    #[error("Service temporarily unavailable. Please try again later.")]
+    ServiceUnavailable,
+
+    #[error("Request timeout. Please check your connection and try again.")]
+    RequestTimeout,
 }
 
 /// Serializable error response for IPC
@@ -51,6 +60,9 @@ impl From<AppError> for ErrorResponse {
             AppError::SerializationError(_) => "SERIALIZATION_ERROR",
             AppError::ValidationError(_) => "VALIDATION_ERROR",
             AppError::PermissionError(_) => "PERMISSION_ERROR",
+            AppError::RateLimitExceeded => "RATE_LIMIT_EXCEEDED",
+            AppError::ServiceUnavailable => "SERVICE_UNAVAILABLE",
+            AppError::RequestTimeout => "REQUEST_TIMEOUT",
         };
 
         ErrorResponse {
@@ -63,16 +75,16 @@ impl From<AppError> for ErrorResponse {
 impl From<reqwest::Error> for AppError {
     fn from(err: reqwest::Error) -> Self {
         if err.is_timeout() {
-            AppError::NetworkError("Request timeout".to_string())
+            AppError::RequestTimeout
         } else if err.is_connect() {
-            AppError::NetworkError("Connection failed".to_string())
+            AppError::NetworkError("Connection failed. Please check your internet connection.".to_string())
         } else if let Some(status) = err.status() {
-            if status.as_u16() == 401 {
-                AppError::AuthError("Invalid credentials".to_string())
-            } else if status.as_u16() == 404 {
-                AppError::NotFound
-            } else {
-                AppError::ApiError(format!("HTTP {}: {}", status.as_u16(), err))
+            match status.as_u16() {
+                401 => AppError::AuthError("Invalid credentials. Please check your API key.".to_string()),
+                404 => AppError::NotFound,
+                429 => AppError::RateLimitExceeded,
+                500..=599 => AppError::ServiceUnavailable,
+                _ => AppError::ApiError(format!("HTTP {}: {}", status.as_u16(), err)),
             }
         } else {
             AppError::NetworkError(err.to_string())

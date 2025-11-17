@@ -127,3 +127,44 @@ pub async fn test_connection(app: AppHandle) -> Result<(), ErrorResponse> {
         .await
         .map_err(|e| ErrorResponse::from(e))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_error_response_conversion() {
+        let app_error = AppError::ValidationError("test error".to_string());
+        let error_response: ErrorResponse = app_error.into();
+
+        assert_eq!(error_response.code, "VALIDATION_ERROR");
+        assert!(error_response.error.contains("test error"));
+    }
+
+    #[test]
+    fn test_rate_limit_error() {
+        let app_error = AppError::RateLimitExceeded;
+        let error_response: ErrorResponse = app_error.into();
+
+        assert_eq!(error_response.code, "RATE_LIMIT_EXCEEDED");
+        assert!(error_response.error.contains("Rate limit"));
+    }
+
+    #[test]
+    fn test_service_unavailable_error() {
+        let app_error = AppError::ServiceUnavailable;
+        let error_response: ErrorResponse = app_error.into();
+
+        assert_eq!(error_response.code, "SERVICE_UNAVAILABLE");
+        assert!(error_response.error.contains("unavailable"));
+    }
+
+    #[test]
+    fn test_timeout_error() {
+        let app_error = AppError::RequestTimeout;
+        let error_response: ErrorResponse = app_error.into();
+
+        assert_eq!(error_response.code, "REQUEST_TIMEOUT");
+        assert!(error_response.error.contains("timeout"));
+    }
+}

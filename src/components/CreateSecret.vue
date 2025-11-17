@@ -33,15 +33,15 @@
         </div>
 
         <div class="mb-3">
-          <label class="label" for="ttl">Time to Live (seconds)</label>
+          <label class="label" for="ttl">Time to Live</label>
           <select id="ttl" v-model.number="form.ttl" class="input">
-            <option :value="300">5 minutes</option>
-            <option :value="900">15 minutes</option>
-            <option :value="1800">30 minutes</option>
-            <option :value="3600">1 hour</option>
-            <option :value="14400">4 hours</option>
-            <option :value="86400">1 day</option>
-            <option :value="604800">7 days</option>
+            <option
+              v-for="option in ttlOptions"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
           </select>
           <p class="text-xs text-secondary mt-1">
             How long the secret will be available
@@ -102,15 +102,27 @@ import { reactive, ref, computed } from 'vue';
 import { useAppStore } from '@/stores/app';
 import * as tauriService from '@/services/tauri';
 import type { CreateSecretResponse } from '@/types';
+import { TTL_OPTIONS, TTL_LABELS } from '@/constants';
 
 const store = useAppStore();
 
 const form = reactive({
   secret: '',
   passphrase: '',
-  ttl: 3600,
+  ttl: TTL_OPTIONS.ONE_HOUR,
   recipient: '',
 });
+
+// TTL options for the select dropdown
+const ttlOptions = [
+  { value: TTL_OPTIONS.FIVE_MINUTES, label: TTL_LABELS[TTL_OPTIONS.FIVE_MINUTES] },
+  { value: TTL_OPTIONS.FIFTEEN_MINUTES, label: TTL_LABELS[TTL_OPTIONS.FIFTEEN_MINUTES] },
+  { value: TTL_OPTIONS.THIRTY_MINUTES, label: TTL_LABELS[TTL_OPTIONS.THIRTY_MINUTES] },
+  { value: TTL_OPTIONS.ONE_HOUR, label: TTL_LABELS[TTL_OPTIONS.ONE_HOUR] },
+  { value: TTL_OPTIONS.FOUR_HOURS, label: TTL_LABELS[TTL_OPTIONS.FOUR_HOURS] },
+  { value: TTL_OPTIONS.ONE_DAY, label: TTL_LABELS[TTL_OPTIONS.ONE_DAY] },
+  { value: TTL_OPTIONS.ONE_WEEK, label: TTL_LABELS[TTL_OPTIONS.ONE_WEEK] },
+];
 
 const loading = ref(false);
 const error = ref<string | null>(null);

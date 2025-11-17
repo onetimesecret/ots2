@@ -81,11 +81,12 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { useAppStore } from '@/stores/app';
+import { DEFAULT_API_ENDPOINT } from '@/constants';
 
 const store = useAppStore();
 
 const form = reactive({
-  endpoint: 'https://onetimesecret.com',
+  endpoint: DEFAULT_API_ENDPOINT,
   username: '',
   apiKey: '',
 });
