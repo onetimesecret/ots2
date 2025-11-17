@@ -3,6 +3,16 @@
   "version": "0.1.0",
   "description": "Security-first desktop application for OneTimeSecret",
   "type": "module",
+  "author": "OneTimeSecret Contributors",
+  "license": "SEE LICENSE FILE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onetimesecret/ots2.git"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
@@ -12,7 +22,9 @@
     "tauri:build": "tauri build",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "audit": "npm audit --audit-level=moderate"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.1.1",
