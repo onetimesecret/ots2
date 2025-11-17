@@ -1,0 +1,4 @@
+# Icons placeholder
+# Icons will be generated during the build process
+# You can use @tauri-apps/cli to generate icons from a source image:
+# npm run tauri icon path/to/source-icon.png
