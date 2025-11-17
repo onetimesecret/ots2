@@ -82,6 +82,7 @@
 import { reactive, ref } from 'vue';
 import * as tauriService from '@/services/tauri';
 import type { RetrieveSecretResponse } from '@/types';
+import { getErrorMessage } from '@/types';
 
 const form = reactive({
   secretKey: '',
@@ -108,8 +109,8 @@ async function handleSubmit() {
     // Clear form
     form.secretKey = '';
     form.passphrase = '';
-  } catch (err: any) {
-    error.value = err?.error || err.message || 'Failed to retrieve secret';
+  } catch (err: unknown) {
+    error.value = getErrorMessage(err);
   } finally {
     loading.value = false;
   }

@@ -16,9 +16,6 @@
       "allow": [
         {
           "key": "api_credentials"
-        },
-        {
-          "key": "api_endpoint"
         }
       ]
     },
@@ -27,9 +24,6 @@
       "allow": [
         {
           "key": "api_credentials"
-        },
-        {
-          "key": "api_endpoint"
         }
       ]
     },

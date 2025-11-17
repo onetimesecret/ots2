@@ -100,6 +100,7 @@ import { ref } from 'vue';
 import { useAppStore } from '@/stores/app';
 import * as tauriService from '@/services/tauri';
 import type { SecretMetadata } from '@/types';
+import { getErrorMessage } from '@/types';
 
 const store = useAppStore();
 const selectedMetadata = ref<SecretMetadata | null>(null);
@@ -108,8 +109,8 @@ async function viewMetadata(metadataKey: string) {
   try {
     const metadata = await tauriService.getSecretMetadata(metadataKey);
     selectedMetadata.value = metadata;
-  } catch (err: any) {
-    alert(err?.error || err.message || 'Failed to load metadata');
+  } catch (err: unknown) {
+    alert(getErrorMessage(err));
   }
 }
 
@@ -122,8 +123,8 @@ async function deleteSecret(metadataKey: string) {
     await tauriService.deleteSecret(metadataKey);
     store.removeSecret(metadataKey);
     alert('Secret deleted successfully');
-  } catch (err: any) {
-    alert(err?.error || err.message || 'Failed to delete secret');
+  } catch (err: unknown) {
+    alert(getErrorMessage(err));
   }
 }
 

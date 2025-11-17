@@ -102,6 +102,7 @@ import { reactive, ref, computed } from 'vue';
 import { useAppStore } from '@/stores/app';
 import * as tauriService from '@/services/tauri';
 import type { CreateSecretResponse } from '@/types';
+import { getErrorMessage } from '@/types';
 import { TTL_OPTIONS, TTL_LABELS } from '@/constants';
 
 const store = useAppStore();
@@ -163,8 +164,8 @@ async function handleSubmit() {
     form.secret = '';
     form.passphrase = '';
     form.recipient = '';
-  } catch (err: any) {
-    error.value = err?.error || err.message || 'Failed to create secret';
+  } catch (err: unknown) {
+    error.value = getErrorMessage(err);
   } finally {
     loading.value = false;
   }

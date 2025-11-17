@@ -4,7 +4,6 @@ use tauri::{AppHandle, Manager};
 use tauri_plugin_secure_storage::SecureStorageExt;
 
 const CREDENTIALS_KEY: &str = "api_credentials";
-const ENDPOINT_KEY: &str = "api_endpoint";
 
 /// API credentials structure
 #[derive(Debug, Clone, Serialize, Deserialize)]

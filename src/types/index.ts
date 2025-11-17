@@ -74,3 +74,31 @@ export interface SecretListItem {
   state: string;
   passphrase_required: boolean;
 }
+
+/**
+ * Type guard to check if an error is an ErrorResponse
+ */
+export function isErrorResponse(error: unknown): error is ErrorResponse {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'error' in error &&
+    typeof (error as ErrorResponse).error === 'string'
+  );
+}
+
+/**
+ * Extract error message from unknown error type
+ */
+export function getErrorMessage(error: unknown): string {
+  if (isErrorResponse(error)) {
+    return error.error;
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  return 'An unknown error occurred';
+}
